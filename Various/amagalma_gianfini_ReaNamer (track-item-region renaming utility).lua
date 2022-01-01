@@ -952,17 +952,17 @@ function ApplyModifier(prevName, modifier, parm1, parm2, seq_number) -- apply on
   elseif modifier == "clear" then
     newName = ""
   elseif modifier == "trimstart" then
-    newName = newName:sub(parm1 + 1)
+    newName = newName:sub((utf8.offset(newName, parm1 + 1) - 1) + 1)
   elseif modifier == "trimend" then
     local length = newName:len()
-    newName = newName:sub(1, length - parm1)
+    newName = newName:sub(1, length - (utf8.offset(newName, parm1 + 1) -1))
   elseif modifier == "keep" then
     local mode, number = parm1:match("([seSE])%s?(%d+)")
     number = tonumber(number)
     if mode:match("[sS]") then
-      newName = newName:sub(0, number)
+      newName = newName:sub(0, (utf8.offset(newName, number + 1)-1))
     else
-      newName = newName:sub((-1)*number)
+      newName = newName:sub((-1)*(utf8.offset(newName, number + 1)-1))
     end
   elseif modifier == "replace" then
     if parm1 ~= "" then
